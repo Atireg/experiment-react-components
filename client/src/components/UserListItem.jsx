@@ -1,3 +1,5 @@
+import { fromIsoDate } from "../utils/dateUtils.js";
+
 export default function UserListItem({
     firstName,
     lastName,
@@ -7,6 +9,7 @@ export default function UserListItem({
     imageUrl
 }) {
 
+    
     return (
         <tr>
             <td>
@@ -17,7 +20,7 @@ export default function UserListItem({
             <td>{lastName}</td>
             <td>{email}</td>
             <td>{phoneNumber}</td>
-            <td>{updatedAt}</td>
+            <td>{fromIsoDate(updatedAt)}</td>
 
             <td className="actions">
                 <button className="btn edit-btn" title="Edit">
