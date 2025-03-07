@@ -5,10 +5,12 @@ import userService from "../services/userService.js";
 import Pagination from "./Pagination";
 import Search from "./Search";
 import UserListItem from "./UserListItem";
+import UserCreate from "./UserCreate.jsx";
 
 export default function UserList(){
 
     const [users, setUsers] = useState([]);
+    const [showCreate, setShowCreate] = useState(false);
 
     useEffect(() => {
         userService.getAll()
@@ -20,9 +22,19 @@ export default function UserList(){
             // .catch()
     }, []);
 
+    const createUserClickHandler = () => {
+        setShowCreate(true);      
+    }
+
+    const closeCreateUserClcikHandler = () => {
+        setShowCreate(false);
+    }
+
     return(
         <section className="card users-container">
                     <Search />
+
+                    {showCreate && <UserCreate onClose={closeCreateUserClcikHandler}/>}
                     
                     {/* <!-- Table component --> */}
                     <div className="table-wrapper">
@@ -140,7 +152,7 @@ export default function UserList(){
                     </div>
 
                     {/* <!-- New user button  --> */}
-                    <button className="btn-add btn">Add new user</button>
+                    <button className="btn-add btn" onClick={createUserClickHandler}>Add new user</button>
 
                     <Pagination />                   
                 </section>
