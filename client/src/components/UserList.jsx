@@ -7,12 +7,14 @@ import Search from "./Search";
 import UserListItem from "./UserListItem";
 import UserCreate from "./UserCreate.jsx";
 import UserInfo from "./UserInfo.jsx";
+import UserDelete from "./UserDelete.jsx";
 
 export default function UserList(){
 
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
     const [userIdInfo, setUserIdInfo] = useState(null);
+    const [userIdDelete, setUserIdDelete] = useState(null);
 
     useEffect(() => {
         userService.getAll()
@@ -58,6 +60,25 @@ export default function UserList(){
         setUserIdInfo(null);
     };
 
+    const deleteUserHandler = (userId) => {
+        setUserIdDelete(userId);
+    };
+
+    const userDeleteCloseHandler = () => {
+        setUserIdDelete(null);
+    };
+
+    const userDeleteHandler = async () => {
+        // Delete request to server
+        await userService.remove(userIdDelete);
+
+        // Delete from local state
+        setUsers(state => state.filter(user => user._id !== userIdDelete));
+
+        // Close modal
+        setUserIdDelete(null);
+    }
+
     return(
         <section className="card users-container">
                     <Search />
@@ -73,6 +94,13 @@ export default function UserList(){
                         <UserInfo
                             userId={userIdInfo}
                             onClose={closeUserInfoHandler}
+                        />)
+                    }
+
+                    {userIdDelete && (
+                        <UserDelete
+                            onClose={userDeleteCloseHandler}
+                            onDelete={userDeleteHandler}
                         />)
                     }
                     
@@ -188,6 +216,7 @@ export default function UserList(){
                                 {users.map(user => <UserListItem
                                     key={user._id}
                                     onInfoClick={showUserInfoHandler}
+                                    onDeleteUser={deleteUserHandler}
                                     {...user}
                                     />)}
                                 
