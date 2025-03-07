@@ -7,8 +7,6 @@ export default {
 
         const users = Object.values(result);
 
-        //TODO Add error handling
-
         return users;
     }
 }
